@@ -31,6 +31,18 @@ var ES_site_announcement = function( announcement_type ) {
 				endpoint_url += '/' + this.type;
 			}
 
+			let url_cache_busting = true;
+
+			if ( typeof(Drupal.settings.es_site_announcement) != 'undefined' ) {
+				if ( typeof(Drupal.settings.es_site_announcement.url_cache_busting) != 'undefined') {
+					url_cache_busting = Drupal.settings.es_site_announcement.url_cache_busting;
+				}
+			}
+
+			if ( url_cache_busting ) {
+				endpoint_url += '?' + Date.now().toString();
+			}
+
 			return endpoint_url;
 
 		}
