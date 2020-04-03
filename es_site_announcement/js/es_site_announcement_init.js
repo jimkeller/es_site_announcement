@@ -10,7 +10,7 @@
 	  		var announcement_type_key;
 
 	  		var announcement_types = {
-	  		 'banner' : { 'key': 'banner', 'always_show': true },
+	  		 'banner' : { 'key': 'banner', 'repeat_show': true },
 	  		 'modal': { 'key': 'modal' },
 	  		};
 
@@ -52,19 +52,24 @@
 										let timestamp = parseInt(announcement.timestamp);
 			              let timestamp_last_seen= 0;
 			              let cookie_name = 'es_site_announcement_' + announcement_type_data.key;
-			              let always_show = (typeof(announcement_type_data.always_show) != 'undefined' && announcement_type_data.always_show) ? true : false;
+			              let cookie_name_closed = 'es_site_announcement_' + announcement_type_data.key + '_closed';
+			              let repeat_show = (typeof(announcement_type_data.repeat_show) != 'undefined' && announcement_type_data.repeat_show) ? true : false;
 
 			              if ( $.cookie(cookie_name) ) {
 			                timestamp_last_seen = parseInt($.cookie(cookie_name));
 			              }
 
-										if ( always_show || debug || timestamp_last_seen < timestamp  ) {
+			              if ( $.cookie(cookie_name_closed) ) {
+			              	repeat_show = false;
+			              }
 
-											$.cookie( cookie_name, timestamp, { domain: cookie_domain });
+										if ( repeat_show || debug || timestamp_last_seen < timestamp  ) {
 
-											let function_name = 'handle_announcement_' + announcement_type_data.key;
+												$.cookie( cookie_name, timestamp, { domain: cookie_domain });
 
-											return eval( 'handle_announcement_' + announcement_type_data.key + '( announcement );' );
+												let function_name = 'handle_announcement_' + announcement_type_data.key;
+
+												return eval( 'handle_announcement_' + announcement_type_data.key + '( announcement );' );											
 
 										}
 
@@ -191,6 +196,10 @@
 					close_element.addEventListener('click',
 						function() {
 							banner_element.style.display = 'none';
+
+							let closed_cookie_name =  'es_site_announcement_banner_closed';
+							$.cookie( closed_cookie_name, 1, { domain: cookie_domain });
+			              
 						}
 					);
 
