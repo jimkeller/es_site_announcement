@@ -170,6 +170,7 @@
 
 					let banner_element = document.createElement('div');
 					let boundary_element = document.createElement('div');
+					let container_element = document.createElement('div');
 		  		let title_element  = document.createElement('div');
 		  		let body_element  = document.createElement('div');
 		  		let close_element = document.createElement('div');
@@ -183,6 +184,7 @@
 		  		}
 
 		  		boundary_element.className = 'announcement-banner__boundary';
+		  		container_element.className = 'announcement-banner__container';
 
 		  		title_element.className = 'announcement-banner__title';
 		  		title_element.innerText = announcement.title;
@@ -203,10 +205,12 @@
 						}
 					);
 
-	  			boundary_element.appendChild(title_element);
-		  		boundary_element.appendChild(body_element);
-		  		boundary_element.appendChild(close_element);
-
+	  			container_element.appendChild(title_element);
+		  		container_element.appendChild(body_element);
+		  		container_element.appendChild(close_element);
+		  		
+		  		boundary_element.appendChild(container_element);
+		  		
 		  		banner_element.appendChild(boundary_element);
 
 		  		if ( banner_insert_before_selector ) {
