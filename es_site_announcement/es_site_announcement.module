@@ -1,0 +1,34 @@
+<?php
+
+function es_site_announcement_preprocess_page(&$vars, $hook) {
+
+	if ( !user_is_logged_in() ) {
+
+		global $conf;
+
+		$module_key = 'es_site_announcement';
+
+		//
+		// Legacy module name and settings
+		//
+		if ( !empty($conf['pmc_announcement']) ) {
+			$conf[$module_key] = $conf['pmc_announcement'];
+
+			if ( empty($conf[$module_key]['api_endpoint_url']) ) {
+				$conf[$module_key]['api_endpoint_url'] = 'https://pmcpropertygroup.com/api/announcements';
+			}
+		}
+
+		if ( !empty($conf[$module_key]) ) {
+			drupal_add_js( array($module_key => $conf[$module_key]), 'setting');
+		}
+
+		drupal_add_library('system', 'jquery.cookie');
+		drupal_add_css(drupal_get_path('module', $module_key) . '/css/tingle.min.css');
+		drupal_add_css(drupal_get_path('module', $module_key) . '/css/es_site_announcement.css');
+		drupal_add_js(drupal_get_path('module', $module_key) . '/js/vendor/tingle.min.js');
+		drupal_add_js(drupal_get_path('module', $module_key) . '/js/modules/ES_site_announcement.js');
+		drupal_add_js(drupal_get_path('module', $module_key) . '/js/es_site_announcement_init.js');
+	}
+
+}
