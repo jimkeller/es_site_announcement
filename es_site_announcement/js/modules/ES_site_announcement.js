@@ -17,7 +17,7 @@ var ES_site_announcement = function( announcement_type ) {
 
 		try { 
 
-			let endpoint_url = window.location.protocol + '//' + window.location.host + '/api/announcements'; //default endpoint
+			var endpoint_url = window.location.protocol + '//' + window.location.host + '/api/announcements'; //default endpoint
 
 			if ( typeof(Drupal) != 'undefined' && typeof(Drupal.settings) != 'undefined' ) {
 				if ( typeof(Drupal.settings.es_site_announcement) != 'undefined' ) {
@@ -31,7 +31,7 @@ var ES_site_announcement = function( announcement_type ) {
 				endpoint_url += '/' + this.type;
 			}
 
-			let url_cache_busting = true;
+			var url_cache_busting = true;
 
 			if ( typeof(Drupal.settings.es_site_announcement) != 'undefined' ) {
 				if ( typeof(Drupal.settings.es_site_announcement.url_cache_busting) != 'undefined') {
@@ -60,8 +60,8 @@ var ES_site_announcement = function( announcement_type ) {
 
 		try {
 
-			let request = new XMLHttpRequest();
-    	let endpoint_url = this.api_endpoint_url();
+			var request = new XMLHttpRequest();
+    	var endpoint_url = this.api_endpoint_url();
 
     	return new Promise(function (resolve, reject) {
 

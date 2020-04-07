@@ -34,26 +34,26 @@
 	  				// after the loop has already moved onto the next announcement type, and you get
 	  				// unreliable results.
 	  				//
-	  				let announcement_fetch_data = function( announcement_type_data ) {
+	  				var announcement_fetch_data = function( announcement_type_data ) {
 
-							let announcement_obj = new ES_site_announcement(announcement_type_data.key);
+							var announcement_obj = new ES_site_announcement(announcement_type_data.key);
 
 				  		announcement_obj.fetch_data()
 				  		.then(
 				  			function(request) {
 
-				  				let data = JSON.parse(request.responseText);
+				  				var data = JSON.parse(request.responseText);
 
 									if ( typeof(data.announcements) != 'undefined' && data.announcements.length > 0 ) {
 										//
 										// We only care about the latest announcement for now.
 										//
-										let announcement = data.announcements[0].announcement;
-										let timestamp = parseInt(announcement.timestamp);
-			              let timestamp_last_seen= 0;
-			              let cookie_name = 'es_site_announcement_' + announcement_type_data.key;
-			              let cookie_name_closed = 'es_site_announcement_' + announcement_type_data.key + '_closed';
-			              let repeat_show = (typeof(announcement_type_data.repeat_show) != 'undefined' && announcement_type_data.repeat_show) ? true : false;
+										var announcement = data.announcements[0].announcement;
+										var timestamp = parseInt(announcement.timestamp);
+			              var timestamp_last_seen= 0;
+			              var cookie_name = 'es_site_announcement_' + announcement_type_data.key;
+			              var cookie_name_closed = 'es_site_announcement_' + announcement_type_data.key + '_closed';
+			              var repeat_show = (typeof(announcement_type_data.repeat_show) != 'undefined' && announcement_type_data.repeat_show) ? true : false;
 
 			              if ( $.cookie(cookie_name) ) {
 			                timestamp_last_seen = parseInt($.cookie(cookie_name));
@@ -67,7 +67,7 @@
 
 												$.cookie( cookie_name, timestamp, { domain: cookie_domain });
 
-												let function_name = 'handle_announcement_' + announcement_type_data.key;
+												var function_name = 'handle_announcement_' + announcement_type_data.key;
 
 												return eval( 'handle_announcement_' + announcement_type_data.key + '( announcement );' );											
 
@@ -90,7 +90,7 @@
 
 		  		try {
 		  			
-						let modal = new tingle.modal({
+						var modal = new tingle.modal({
 						    footer: true,
 						    stickyFooter: false,
 						    closeMethods: ['overlay', 'button', 'escape'],
@@ -136,12 +136,12 @@
 
 	  		try {
 
-	  			let banner_container_selector = 'div.viewport';
-	  			let banner_insert_before_selector = null;
-	  			let banner_container = null;
-	  			let banner_animate_in = true;
-	  			let insert_before_element = null;
-	  			let wait_timeout = 0;
+	  			var banner_container_selector = 'div.viewport';
+	  			var banner_insert_before_selector = null;
+	  			var banner_container = null;
+	  			var banner_animate_in = true;
+	  			var insert_before_element = null;
+	  			var wait_timeout = 0;
 
 					if ( typeof(Drupal.settings.es_site_announcement) != 'undefined' ) {
 		  			if ( typeof(Drupal.settings.es_site_announcement.banner_container_selector) != 'undefined' ) {
@@ -168,12 +168,12 @@
 		  			throw "Could not find selector for banner: " + banner_container_selector;
 		  		}
 
-					let banner_element = document.createElement('div');
-					let boundary_element = document.createElement('div');
-					let container_element = document.createElement('div');
-		  		let title_element  = document.createElement('div');
-		  		let body_element  = document.createElement('div');
-		  		let close_element = document.createElement('div');
+					var banner_element = document.createElement('div');
+					var boundary_element = document.createElement('div');
+					var container_element = document.createElement('div');
+		  		var title_element  = document.createElement('div');
+		  		var body_element  = document.createElement('div');
+		  		var close_element = document.createElement('div');
 
 		  		document.querySelector('body').setAttribute('data-has-banner-announcement', true);
 
@@ -199,7 +199,7 @@
 						function() {
 							banner_element.style.display = 'none';
 
-							let closed_cookie_name =  'es_site_announcement_banner_closed';
+							var closed_cookie_name =  'es_site_announcement_banner_closed';
 							$.cookie( closed_cookie_name, 1, { domain: cookie_domain });
 			              
 						}

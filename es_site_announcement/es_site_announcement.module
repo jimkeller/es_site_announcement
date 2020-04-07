@@ -27,6 +27,19 @@ function es_site_announcement_preprocess_page(&$vars, $hook) {
 		drupal_add_css(drupal_get_path('module', $module_key) . '/css/tingle.min.css');
 		drupal_add_css(drupal_get_path('module', $module_key) . '/css/es_site_announcement.css');
 		drupal_add_js(drupal_get_path('module', $module_key) . '/js/vendor/tingle.min.js');
+
+		if ( !empty($conf[$module_key]['ie_support']['enabled']) && $conf[$module_key]['ie_support']['enabled'] ) {
+
+			drupal_add_js(drupal_get_path('module', $module_key) . '/js/vendor/promise.polyfill.min.js');
+
+			if ( !empty($conf[$module_key]['ie_support']['polyfills']) ) {
+				foreach( $conf[$module_key]['ie_support']['polyfills'] as $polyfill ) {
+					drupal_add_js($polyfill, 'external');
+				}
+			}
+			
+		}
+
 		drupal_add_js(drupal_get_path('module', $module_key) . '/js/modules/ES_site_announcement.js');
 		drupal_add_js(drupal_get_path('module', $module_key) . '/js/es_site_announcement_init.js');
 	}
