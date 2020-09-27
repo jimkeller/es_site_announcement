@@ -10,7 +10,7 @@
 	  		var announcement_type_key;
 
 	  		var announcement_types = {
-	  		 'banner' : { 'key': 'banner', 'repeat_show': true },
+	  		 'banner' : { 'key': 'banner', 'always_show': true },
 	  		 'modal': { 'key': 'modal' },
 	  		};
 
@@ -34,42 +34,37 @@
 	  				// after the loop has already moved onto the next announcement type, and you get
 	  				// unreliable results.
 	  				//
-	  				var announcement_fetch_data = function( announcement_type_data ) {
+	  				let announcement_fetch_data = function( announcement_type_data ) {
 
-							var announcement_obj = new ES_site_announcement(announcement_type_data.key);
+							let announcement_obj = new ES_site_announcement(announcement_type_data.key);
 
 				  		announcement_obj.fetch_data()
 				  		.then(
 				  			function(request) {
 
-				  				var data = JSON.parse(request.responseText);
+				  				let data = JSON.parse(request.responseText);
 
 									if ( typeof(data.announcements) != 'undefined' && data.announcements.length > 0 ) {
 										//
 										// We only care about the latest announcement for now.
 										//
-										var announcement = data.announcements[0].announcement;
-										var timestamp = parseInt(announcement.timestamp);
-			              var timestamp_last_seen= 0;
-			              var cookie_name = 'es_site_announcement_' + announcement_type_data.key;
-			              var cookie_name_closed = 'es_site_announcement_' + announcement_type_data.key + '_closed';
-			              var repeat_show = (typeof(announcement_type_data.repeat_show) != 'undefined' && announcement_type_data.repeat_show) ? true : false;
+										let announcement = data.announcements[0].announcement;
+										let timestamp = parseInt(announcement.timestamp);
+			              let timestamp_last_seen= 0;
+			              let cookie_name = 'es_site_announcement_' + announcement_type_data.key;
+			              let always_show = (typeof(announcement_type_data.always_show) != 'undefined' && announcement_type_data.always_show) ? true : false;
 
 			              if ( $.cookie(cookie_name) ) {
 			                timestamp_last_seen = parseInt($.cookie(cookie_name));
 			              }
 
-			              if ( $.cookie(cookie_name_closed) ) {
-			              	repeat_show = false;
-			              }
+										if ( always_show || debug || timestamp_last_seen < timestamp  ) {
 
-										if ( repeat_show || debug || timestamp_last_seen < timestamp  ) {
+											$.cookie( cookie_name, timestamp, { domain: cookie_domain });
 
-												$.cookie( cookie_name, timestamp, { domain: cookie_domain });
+											let function_name = 'handle_announcement_' + announcement_type_data.key;
 
-												var function_name = 'handle_announcement_' + announcement_type_data.key;
-
-												return eval( 'handle_announcement_' + announcement_type_data.key + '( announcement );' );											
+											return eval( 'handle_announcement_' + announcement_type_data.key + '( announcement );' );
 
 										}
 
@@ -90,7 +85,7 @@
 
 		  		try {
 		  			
-						var modal = new tingle.modal({
+						let modal = new tingle.modal({
 						    footer: true,
 						    stickyFooter: false,
 						    closeMethods: ['overlay', 'button', 'escape'],
@@ -136,12 +131,12 @@
 
 	  		try {
 
-	  			var banner_container_selector = 'div.viewport';
-	  			var banner_insert_before_selector = null;
-	  			var banner_container = null;
-	  			var banner_animate_in = true;
-	  			var insert_before_element = null;
-	  			var wait_timeout = 0;
+	  			let banner_container_selector = 'div.viewport';
+	  			let banner_insert_before_selector = null;
+	  			let banner_container = null;
+	  			let banner_animate_in = true;
+	  			let insert_before_element = null;
+	  			let wait_timeout = 0;
 
 					if ( typeof(Drupal.settings.es_site_announcement) != 'undefined' ) {
 		  			if ( typeof(Drupal.settings.es_site_announcement.banner_container_selector) != 'undefined' ) {
@@ -168,12 +163,11 @@
 		  			throw "Could not find selector for banner: " + banner_container_selector;
 		  		}
 
-					var banner_element = document.createElement('div');
-					var boundary_element = document.createElement('div');
-					var container_element = document.createElement('div');
-		  		var title_element  = document.createElement('div');
-		  		var body_element  = document.createElement('div');
-		  		var close_element = document.createElement('div');
+					let banner_element = document.createElement('div');
+					let boundary_element = document.createElement('div');
+		  		let title_element  = document.createElement('div');
+		  		let body_element  = document.createElement('div');
+		  		let close_element = document.createElement('div');
 
 		  		document.querySelector('body').setAttribute('data-has-banner-announcement', true);
 
@@ -184,7 +178,6 @@
 		  		}
 
 		  		boundary_element.className = 'announcement-banner__boundary';
-		  		container_element.className = 'announcement-banner__container';
 
 		  		title_element.className = 'announcement-banner__title';
 		  		title_element.innerText = announcement.title;
@@ -198,19 +191,15 @@
 					close_element.addEventListener('click',
 						function() {
 							banner_element.style.display = 'none';
-
-							var closed_cookie_name =  'es_site_announcement_banner_closed';
-							$.cookie( closed_cookie_name, 1, { domain: cookie_domain });
-			              
 						}
 					);
 
-	  			container_element.appendChild(title_element);
-		  		container_element.appendChild(body_element);
-		  		container_element.appendChild(close_element);
-		  		
-		  		boundary_element.appendChild(container_element);
-		  		
+					if ( typeof(announcement.show_title) == 'undefined' || announcement.show_title == true ) {
+						boundary_element.appendChild(title_element);
+					}
+		  		boundary_element.appendChild(body_element);
+		  		boundary_element.appendChild(close_element);
+
 		  		banner_element.appendChild(boundary_element);
 
 		  		if ( banner_insert_before_selector ) {
@@ -224,6 +213,7 @@
 					setTimeout (
 						function() {
 
+							var html_element = document.querySelector('html');
 				  		banner_container.insertBefore(banner_element, insert_before_element);
 
 				  		if ( banner_animate_in ) {
@@ -232,7 +222,16 @@
 				  				function() {
 				  					this.style.height = 'auto';
 				  					window.scrollTo(0, 0);
-				  					document.querySelector('html').scrollTo(0, 0);
+
+				  					if ( typeof(html_element.scrollTo) != 'undefined' ) {
+				  						html_element.scrollTo(0, 0);
+				  					}
+				  					else {
+				  						if ( typeof(html_element.scrollTop) != 'undefined' ) {
+				  							html_element.scrollTop = 0;
+				  						}
+				  					}
+
 				  					if ( typeof(window.es_site_announcement) != 'undefined' && typeof(window.es_site_announcement.callbacks.afterDisplay) != 'undefined') {
 				  						window.es_site_announcement.callbacks.afterDisplay.call(this, { 'banner_element': banner_element });
 				  					}
@@ -240,7 +239,16 @@
 				  			);
 
 				  			window.scrollTo(0, 0);
-				  			document.querySelector('html').scrollTo(0, 0);
+
+		  					if ( typeof(html_element.scrollTo) != 'undefined' ) {
+		  						html_element.scrollTo(0, 0);
+		  					}
+		  					else {
+		  						if ( typeof(html_element.scrollTop) != 'undefined' ) {
+		  							html_element.scrollTop = 0;
+		  						}
+		  					}
+				  			
 				  			banner_element.style.height = banner_element.scrollHeight.toString() + 'px';
 				  		}
 				  		else {
