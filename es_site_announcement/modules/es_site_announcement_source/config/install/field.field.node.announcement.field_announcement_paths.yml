@@ -1,0 +1,19 @@
+uuid: 324c7609-561a-44ff-912e-0d6bf0049c12
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_announcement_paths
+    - node.type.announcement
+id: node.announcement.field_announcement_paths
+field_name: field_announcement_paths
+entity_type: node
+bundle: announcement
+label: 'Show on which Pages'
+description: "A list of URLs or partial URLs on which to show this announcement. For example:\r\n<front>\r\n/events/*\r\n\r\nUse an exclamation point at the beginning of the URL to negate the path, e.g.:\r\n!/no-announcements"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

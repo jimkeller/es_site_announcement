@@ -1,0 +1,11 @@
+es_site_announcements.api:
+  path: '/api/announcements/{type}'
+  defaults:
+    _controller: '\Drupal\es_site_announcement_source\Controller\AnnouncementAPIController::announcements'
+    _title: 'Announcements API'
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      type:
+        type: String  

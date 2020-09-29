@@ -1,0 +1,21 @@
+uuid: ad1ba657-c3f1-4c84-8091-9ee49ef1b6a3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_announcement_close_label
+    - node.type.announcement
+id: node.announcement.field_announcement_close_label
+field_name: field_announcement_close_label
+entity_type: node
+bundle: announcement
+label: 'Close Button Label'
+description: 'The text of the button that will close a popup announcement'
+required: false
+translatable: false
+default_value:
+  -
+    value: Close
+default_value_callback: ''
+settings: {  }
+field_type: string

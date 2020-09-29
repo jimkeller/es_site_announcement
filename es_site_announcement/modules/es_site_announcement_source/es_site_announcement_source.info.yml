@@ -1,0 +1,5 @@
+name: 'ES Site Announcement Source'
+description: "Content types, views, and other config for the source of an ES site announcement. Must be enabled if this site is intended to provide the announcement content."
+package: 'Eastern Standard'
+core: 8.x
+type: module

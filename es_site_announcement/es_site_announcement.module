@@ -1,47 +1,20 @@
 <?php
 
-function es_site_announcement_preprocess_page(&$vars, $hook) {
+function es_site_announcement_page_attachments(array &$page) {
 
-	if ( !user_is_logged_in() ) {
+    $module_key = 'es_site_announcement';
 
-		global $conf;
+    $module_config = \Drupal::config("{$module_key}.settings")->get();
 
-		$module_key = 'es_site_announcement';
+    if ( $module_config ) {
+        $page['#attached']['drupalSettings'][$module_key] = $module_config;
+    }
 
-		//
-		// Legacy module name and settings
-		//
-		if ( !empty($conf['pmc_announcement']) ) {
-			$conf[$module_key] = $conf['pmc_announcement'];
+    $route = \Drupal::routeMatch()->getRouteObject();
+    $is_admin = \Drupal::service('router.admin_context')->isAdminRoute($route);    
 
-			if ( empty($conf[$module_key]['api_endpoint_url']) ) {
-				$conf[$module_key]['api_endpoint_url'] = 'https://pmcpropertygroup.com/api/announcements';
-			}
-		}
-
-		if ( !empty($conf[$module_key]) ) {
-			drupal_add_js( array($module_key => $conf[$module_key]), 'setting');
-		}
-
-		drupal_add_library('system', 'jquery.cookie');
-		drupal_add_css(drupal_get_path('module', $module_key) . '/css/tingle.min.css');
-		drupal_add_css(drupal_get_path('module', $module_key) . '/css/es_site_announcement.css');
-		drupal_add_js(drupal_get_path('module', $module_key) . '/js/vendor/tingle.min.js');
-
-		if ( !empty($conf[$module_key]['ie_support']['enabled']) && $conf[$module_key]['ie_support']['enabled'] ) {
-
-			drupal_add_js(drupal_get_path('module', $module_key) . '/js/vendor/promise.polyfill.min.js');
-
-			if ( !empty($conf[$module_key]['ie_support']['polyfills']) ) {
-				foreach( $conf[$module_key]['ie_support']['polyfills'] as $polyfill ) {
-					drupal_add_js($polyfill, 'external');
-				}
-			}
-			
-		}
-
-		drupal_add_js(drupal_get_path('module', $module_key) . '/js/modules/ES_site_announcement.js');
-		drupal_add_js(drupal_get_path('module', $module_key) . '/js/es_site_announcement_init.js');
-	}
-
+    if ( !$is_admin ) {
+        $page['#attached']['library'][] = 'es_site_announcement/es_site_announcement';
+    }
+    
 }

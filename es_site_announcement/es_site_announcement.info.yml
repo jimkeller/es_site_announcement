@@ -1,0 +1,5 @@
+name: 'ES Site Announcement'
+description: "Displays announcement popups or banners using Javascript and an API endpoint, to ensure they don't get cached"
+package: 'Eastern Standard'
+core: 8.x
+type: module

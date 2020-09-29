@@ -1,0 +1,16 @@
+es_site_announcement:
+  version: 1.x
+  css:
+    component:
+      css/tingle.min.css: {}
+    theme:
+      css/es_site_announcement.css: {}
+  js:
+    js/vendor/tingle.min.js: {}
+    js/modules/ES_site_announcement.js: {}
+    js/es_site_announcement_init.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    - core/js-cookie

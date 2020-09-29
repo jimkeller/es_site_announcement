@@ -1,0 +1,7 @@
+cookie_domain: ''
+debug: 0
+banner_container_selector: 'body'
+banner_insert_before_selector: ''
+banner_animate_in: 1
+banner_wait_timeout: 0
+modal_close_label: 'Close'
