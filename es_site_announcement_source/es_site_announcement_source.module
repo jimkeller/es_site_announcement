@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the es_site_announcement_source feature.
- */
-
-include_once 'es_site_announcement_source.features.inc';
