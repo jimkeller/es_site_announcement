@@ -88,7 +88,7 @@
 
 									if ( always_show || debug || timestamp_last_seen < timestamp  ) {
 
-										cookies.set( cookie_name, timestamp, { domain: cookie_domain });
+										cookies.set( cookie_name, timestamp, { domain: cookie_domain, sameSite: 'Lax' });
 
 										let function_name = 'handle_announcement_' + announcement_type_data.key;
 
@@ -313,6 +313,7 @@
 					let i, path;
 					let negate;
 					let found_match = false; 
+					let found_non_negated_path = false;
 					for ( i = 0; i < paths.length; i ++ ) {
 
 						negate = false;
@@ -326,6 +327,9 @@
 							}
 						}
 						else {
+
+							found_non_negated_path = true;
+
 							if ( check_path_against_current(path) ) {
 								//
 								// Don't immediately return true here because
@@ -336,6 +340,16 @@
 							}
 						}
 
+					}
+
+					//
+					// If only excluded paths were configured, but we've reached this point,
+					// we didn't find any of the excluded paths, so we return a "yes". In other words, the 
+					// user has only configured pages on which they do not want the alert to appear, so
+					// we assume they do want it to appear on other pages.
+					//
+					if ( !found_non_negated_path ) {
+						found_match = true;
 					}
 
 					return found_match;
